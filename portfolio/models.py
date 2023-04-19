@@ -50,8 +50,8 @@ class Project(models.Model):
   # to convert it to JPEG
   def save(self, *args, **kwargs):
     if self.image:
-      filename = "%s.jpg" % self.image.name.split('.')[0]
-      
+      filename = f"{self.image.name.split('.')[0]}.jpg"
+
       image = Image.open(self.image)
       # for PNG images discard the alpha channel and fill it with some color
       if image.mode in ('RGBA', 'LA'):
@@ -60,7 +60,7 @@ class Project(models.Model):
         image = background
         image_io = BytesIO()
         image.save(image_io, format='JPEG', quality=100)
-                
+
         # change the image field value to be the newly modified image value
         self.image.save(filename, ContentFile(image_io.getvalue()), save=False)
     super(Project, self).save(*args, **kwargs)
